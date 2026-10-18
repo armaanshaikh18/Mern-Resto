@@ -1,36 +1,33 @@
-let mongoose = require("mongoose");
+const mongoose = require("mongoose");
+const dns = require("dns");
 
-let mongoURL = "mongodb://localhost:27017/GoFoodMern";
-// "mongodb+srv://Gofood:Armaan123@atlascluster.96ttpnt.mongodb.net/goFoodMern?retryWrites=true&w=majority";
+dns.setServers(["8.8.8.8", "8.8.4.4"]);
+mongoose.set("strictQuery", false);
+
+const mongoURL =
+  "mongodb+srv://Gofood:Armaan123@gofoodcluster.jtzkguh.mongodb.net/GoFoodMern?retryWrites=true&w=majority";
+
 const mongoDB = async () => {
-  await mongoose.connect(
-    mongoURL,
+  try {
+    await mongoose.connect(mongoURL);
+    console.log("Connected to MongoDB Atlas successfully!");
 
-    async (err) => {
-      if (err) {
-        console.log("err", err);
-      } else {
-        console.log("Connected To db");
-        const fetched_data = await mongoose.connection.db.collection(
-          "Food_items"
-        );
-        fetched_data.find({}).toArray(async (err, data) => {
-          const categoryData = await mongoose.connection.db.collection(
-            "Food_Category"
-          );
+    // Ensure database and collection names match Atlas exact casing
+    const fetched_data = mongoose.connection.db.collection("Food_items");
+    const data = await fetched_data.find({}).toArray();
 
-          categoryData.find({}).toArray((err, catData) => {
-            if (err) console.log("Error", err);
-            else {
-              global.Food_items = data;
-              global.Food_Category = catData;
-              // console.log("data", data);
-            }
-          });
-        });
-      }
-    }
-  );
+    const categoryData = mongoose.connection.db.collection("Food_Category");
+    const catData = await categoryData.find({}).toArray();
+
+    global.Food_items = data;
+    global.Food_Category = catData;
+
+    console.log(
+      `Loaded ${data.length} food items and ${catData.length} categories.`,
+    );
+  } catch (err) {
+    console.error("MongoDB Connection Error:", err.message);
+  }
 };
 
 module.exports = mongoDB;

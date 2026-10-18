@@ -1,44 +1,32 @@
-let express = require("express");
-let mongoose = require("mongoose");
-let mongoDB = require("./FoodDb");
-mongoDB();
-let app = express();
-let User = require("./routes/User");
-let Display = require("./routes/DisplayData");
-let Login = require("./routes/LoginUser");
-let Order = require("./routes/OrderData");
-let OrderHistory = require("./routes/OrderHistory");
-let port = 4200;
+const express = require("express");
+const mongoDB = require("./FoodDb");
 
-app.use((req, res, next) => {
-  res.setHeader("Access-Control-Allow-Origin", "http://localhost:3000");
-  res.header(
-    "Access-Control-Allow-Headers",
-    "Origin, X-Requested-With,Content-Type,Accept"
-  );
-  next();
-});
+const app = express();
+const port = 4200;
 
-app.use(express.json());
-app.use("/api", User);
-app.use("/api", Display);
-app.use("/api", Login);
-app.use("/api", Order);
-app.use("/api", OrderHistory);
+const startServer = async () => {
+  // Wait for database & global variable initialization
+  await mongoDB();
 
-app.get("/", (req, res) => {
-  res.send("hello world Armaan!!");
-});
+  app.use((req, res, next) => {
+    res.setHeader("Access-Control-Allow-Origin", "http://localhost:3000");
+    res.header(
+      "Access-Control-Allow-Headers",
+      "Origin, X-Requested-With, Content-Type, Accept",
+    );
+    next();
+  });
 
-// mongoose
-//   .connect("mongodb://localhost:27017/GoFoodMern")
-//   .then(() => {
-//     console.log("Connected To db");
-//   })
-//   .catch((error) => {
-//     console.log("Something Went Wrong", error.message);
-//   });
+  app.use(express.json());
+  app.use("/api", require("./routes/User"));
+  app.use("/api", require("./routes/DisplayData"));
+  app.use("/api", require("./routes/LoginUser"));
+  app.use("/api", require("./routes/OrderData"));
+  app.use("/api", require("./routes/OrderHistory"));
 
-app.listen(port, () => {
-  console.log(`Connected to server ${port}`);
-});
+  app.listen(port, () => {
+    console.log(`Connected to server port ${port}`);
+  });
+};
+
+startServer();

@@ -28,41 +28,58 @@ const Home = () => {
         <Navbar />
       </div>
 
-      <div id="carouselExampleFade" className="carousel slide carousel-fade">
+      <div
+        id="carouselExampleFade"
+        className="carousel slide carousel-fade"
+        data-bs-ride="carousel"
+      >
         <div className="carousel-inner" style={{ maxHeight: "550px" }}>
           <div className="carousel-caption" style={{ zIndex: "10" }}>
-            <div className="d-flex" role="search">
+            <div className="d-flex justify-content-center" role="search">
               <input
-                className="form-control "
+                className="form-control me-2"
                 type="search"
                 onChange={(e) => setsearchItem(e.target.value)}
-                placeholder="Search"
+                placeholder="Search food items..."
                 aria-label="Search"
+                value={searchItem}
               />
             </div>
           </div>
           <div className="carousel-item active">
             <img
-              src="https://source.unsplash.com/random/900×700/?pizza"
+              src="https://images.unsplash.com/photo-1513104890138-7c749659a591?auto=format&fit=crop&w=900&q=80"
               className="d-block w-100"
-              style={{ filter: "brightness(30%)" }}
-              alt="..."
+              style={{
+                filter: "brightness(30%)",
+                objectFit: "cover",
+                height: "550px",
+              }}
+              alt="Pizza"
             />
           </div>
           <div className="carousel-item">
             <img
-              src="https://source.unsplash.com/random/900×700/?burger"
+              src="https://images.unsplash.com/photo-1568901346375-23c9450c58cd?auto=format&fit=crop&w=900&q=80"
               className="d-block w-100"
-              style={{ filter: "brightness(30%)" }}
-              alt="..."
+              style={{
+                filter: "brightness(30%)",
+                objectFit: "cover",
+                height: "550px",
+              }}
+              alt="Burger"
             />
           </div>
           <div className="carousel-item">
             <img
-              src="https://source.unsplash.com/random/900×700/?noodles"
+              src="https://images.unsplash.com/photo-1569718212165-3a8278d5f624?auto=format&fit=crop&w=900&q=80"
               className="d-block w-100"
-              style={{ filter: "brightness(30%)" }}
-              alt="..."
+              style={{
+                filter: "brightness(30%)",
+                objectFit: "cover",
+                height: "550px",
+              }}
+              alt="Noodles"
             />
           </div>
         </div>
@@ -108,7 +125,7 @@ const Home = () => {
                             items.CategoryName === data.CategoryName &&
                             items.name
                               .toLowerCase()
-                              .includes(searchItem.toLocaleLowerCase())
+                              .includes(searchItem.toLocaleLowerCase()),
                         )
                         .map((filterItems) => {
                           return (
