@@ -1,11 +1,11 @@
 const mongoose = require("mongoose");
 const dns = require("dns");
+require("dotenv").config();
 
 dns.setServers(["8.8.8.8", "8.8.4.4"]);
 mongoose.set("strictQuery", false);
 
-const mongoURL =
-  "mongodb+srv://Gofood:Armaan123@gofoodcluster.jtzkguh.mongodb.net/GoFoodMern?retryWrites=true&w=majority";
+const mongoURL = process.env.MONGO_URI;
 
 const mongoDB = async () => {
   try {
